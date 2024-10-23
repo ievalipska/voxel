@@ -12,8 +12,18 @@ import org.lwjgl.opengl.PixelFormat;
 import com.ch.math.Vector3f;
 import com.ch.voxel.World;
 
+/**
+ * Handles the initialization and main loop of an OpenGL application, responsible for
+ * setting up the display, loading shaders and textures, and rendering a world.
+ */
 public class Main {
 	
+	/**
+	 * Initializes the display and OpenGL, enters a loop of continuous execution, and
+	 * terminates the program with a successful exit status.
+	 *
+	 * @param args command-line arguments passed to the Java program.
+	 */
 	public static void main(String[] args) {
 		
 		initDisplay();
@@ -30,6 +40,11 @@ public class Main {
 //	private static Chunk[][][] ch;
 	private static World w;
 	
+	/**
+	 * Sets the display mode to 1920x1080, creates a new display with specific pixel
+	 * format and context attributes, enables vertical synchronization, and prints the
+	 * OpenGL version to the console.
+	 */
 	private static void initDisplay() {
 		try {
 			Display.setDisplayMode(new DisplayMode(1920, 1080));
@@ -41,6 +56,11 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Initializes OpenGL settings, enabling culling and depth testing, and sets the clear
+	 * color.
+	 * It also initializes the camera, shader, and texture resources.
+	 */
 	private static void initGL() {
 		
 		GL11.glClearColor(0.1f, 0.7f, 1f, 1);
@@ -83,6 +103,11 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Runs the main game loop continuously until the user requests the window to close
+	 * or presses the escape key. It updates the game state, renders the graphics, and
+	 * displays the frame rate and memory usage.
+	 */
 	private static void loop() {
 		
 		Timer.init();
@@ -105,11 +130,23 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Processes the game input and updates the game world's position based on the camera's
+	 * position. The function takes a time delta `dt` as input, indicating the time elapsed
+	 * since the last update.
+	 *
+	 * @param dt time difference between the current and previous frames, used to update
+	 * game logic and physics.
+	 */
 	private static void update(float dt) {
 		c.processInput(dt, 5, .3f);
 		w.updatePos(c.getTransform().getPos().getX(), c.getTransform().getPos().getY(), c.getTransform().getPos().getZ());
 	}
 
+	/**
+	 * Binds a shader, renders a scene using the `w.render` method, and passes the shader
+	 * and camera objects as parameters.
+	 */
 	private static void render() {
 		
 //		Model.enableAttribs();
@@ -131,6 +168,13 @@ public class Main {
 //		Model.disableAttribs();
 	}
 	
+	/**
+	 * Terminates the Java application immediately, exiting the virtual machine with a
+	 * specified status code. This status code can be used by the operating system to
+	 * determine the application's exit status. The function is designed to be called statically.
+	 *
+	 * @param status exit status that is passed to the operating system upon program termination.
+	 */
 	private static void exit(int status) {
 		System.exit(status);
 	}

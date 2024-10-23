@@ -27,6 +27,10 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+/**
+ * Loads textures from image files, generates OpenGL texture IDs, and binds them to
+ * the graphics pipeline for rendering.
+ */
 public class Texture {
 	
 	private String fileName;
@@ -37,24 +41,58 @@ public class Texture {
 		this.id = Texture.loadTexture(fileName);
 	}
 
+	/**
+	 * Is a method called by the garbage collector when an object is about to be destroyed,
+	 * allowing for any final cleanup or resource release.
+	 */
 	@Override
 	protected void finalize() {
 	}
 
+	/**
+	 * Calls the `bind` function with an argument of 0, indicating a default or initial
+	 * binding.
+	 */
 	public void bind() {
 		bind(0);
 	}
 
+	/**
+	 * Binds a texture to the graphics pipeline by setting the active texture unit and
+	 * binding the specified texture. It asserts that the sampler slot is within the valid
+	 * range of 0 to 31.
+	 *
+	 * @param samplerSlot texture unit to bind the texture to, with a valid range of 0
+	 * to 31.
+	 */
 	public void bind(int samplerSlot) {
 		assert (samplerSlot >= 0 && samplerSlot <= 31);
 		glActiveTexture(GL_TEXTURE0 + samplerSlot);
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
 
+	/**
+	 * Returns the value of the `id` variable.
+	 * This value is presumably an integer identifier.
+	 *
+	 * @returns an integer value representing the id.
+	 */
 	public int getID() {
 		return id;
 	}
 
+	/**
+	 * Loads a texture from a specified file, converts it to a format suitable for OpenGL,
+	 * and generates a new OpenGL texture ID. It handles exceptions and returns the texture
+	 * ID on success, or 0 on failure.
+	 *
+	 * @param fileName path to the image file to be loaded and converted into a texture.
+	 *
+	 * @returns a unique integer identifier for the loaded texture.
+	 *
+	 * Generate a unique integer ID for the loaded texture, representing the OpenGL texture
+	 * object.
+	 */
 	private static int loadTexture(String fileName) {
 		try {
 			BufferedImage image = ImageIO.read(new File(fileName));

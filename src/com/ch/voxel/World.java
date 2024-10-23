@@ -6,6 +6,10 @@ import com.ch.Camera;
 import com.ch.Shader;
 
 
+/**
+ * Represents a 3D world with a grid of chunks, each containing a 3D model. It handles
+ * updating the world position and rendering the chunks.
+ */
 public class World {
 
 	private int x, y, z; // in chunks
@@ -21,6 +25,11 @@ public class World {
 		gen();
 	}
 	
+	/**
+	 * Populates a 3D array of `Chunk` objects with generated terrain data.
+	 * It iterates over a rectangular prism of size W x H x D, centered at the coordinates
+	 * (x, y, z), and initializes each chunk with terrain data.
+	 */
 	private void gen() {
 		for (int i = 0; i < W; i++)
 			for (int j = 0; j < H; j++)
@@ -31,6 +40,19 @@ public class World {
 				}
 	}
 
+	/**
+	 * Updates the position of an object in a 3D space, specifically in a chunked world.
+	 * It checks for changes in the chunk coordinates and performs necessary updates,
+	 * including generating new chunks if necessary, to maintain the world's structure.
+	 *
+	 * @param x x-coordinate of a chunk, used to determine the chunk's position and
+	 * potentially trigger chunk generation or updates.
+	 *
+	 * @param y y-coordinate of the position to be updated, but its value is always ignored
+	 * and set to 0.
+	 *
+	 * @param z Determines the vertical position of the chunk being updated.
+	 */
 	public void updatePos(float x, float y, float z) {
 		final int _x = (int) (x / Chunk.CHUNK_SIZE);
 		final int _y = 0;//(int) (y / Chunk.CHUNK_SIZE);
@@ -215,6 +237,24 @@ public class World {
 		/* welp... this logic sure looks aweful */
 	}
 
+	/**
+	 * Renders 3D chunks of the world using a provided shader and camera. It iterates
+	 * through a 3D grid, selecting and drawing chunks that are not null, and applies a
+	 * color to each chunk based on its coordinates.
+	 *
+	 * @param s Shader object, responsible for handling color and matrix uniform variables.
+	 *
+	 * Destructure `s` into its main properties:
+	 * Shader object with uniformf and unifromMat4 methods.
+	 *
+	 * @param c Camera object that is used to calculate the model-view-projection (MVP)
+	 * matrix for each chunk.
+	 *
+	 * Break down `c` into its components:
+	 *
+	 * `c` is a `Camera` object with a `getViewProjection` method and a `getViewProjection`
+	 * method's return type is assumed to be a Matrix.
+	 */
 	public void render(Shader s, Camera c) {
 		for (int i = 0; i < W; i++)
 			for (int j = 0; j < H; j++)
